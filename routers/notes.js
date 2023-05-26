@@ -1,58 +1,34 @@
-const path = require('path');
-const fs = require('fs');
 const notesRouter = require('express').Router();
 const { v4: uuidv4 } = require('uuid');
-const { readFromFile, writeToFile, readAndAppend } = require('../helpers/fsUtils');
+const { readFromFile,  readAndAppend } = require('../helpers/fsUtils');
 
-notesRouter.get('/api/notes', (req, res) => {
-    fs.readFile(dbPath, 'utf8', (err, data) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json('Error in reading notes');
-      } else {
-        const notes = JSON.parse(data);
-        res.status(200).json(notes);
-      }
-    });
+//Route to add saved notes
+notesRouter.get('/', (req, res) => {
+    readFromFile('./db/tips.json').then((data) => res.json(JSON.parse(data)));
   });
   
-  notesRouter.post('/api/notes', (req, res) => {
+//Route to save new notes
+notesRouter.post('/', (req, res) => {
     const { title, text } = req.body;
-  
-    if (title && text) {
-      const newNote = {
-        id: uuidv4(),
+
+    if (req.body) {
+        const newNote = {
         title,
         text,
-      };
-  
-      fs.readFile(dbPath, 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json('Error in reading notes');
-        } else {
-          const parsedNotes = JSON.parse(data);
-  
-          parsedNotes.push(newNote);
-  
-          fs.writeFile(dbPath, JSON.stringify(parsedNotes, null, 2), (writeErr) => {
-            if (writeErr) {
-              console.error(writeErr);
-              res.status(500).json('Error in updating notes');
-            } else {
-              console.info('Successfully updated notes!');
-              res.status(201).json(newNote);
-            }
-          });
-        }
-      });
-    } else {
-      res.status(400).json('Title and text are required');
-    }
-  });
-  
-  notesRouter.delete("/api/notes/:id", (req, res) => {
-    const noteId = req.params.id;
-  });
+        id: uuidv4(),
+        };
 
-  module.exports = notesRouter;
+        readAndAppend(newNote, './db/db.json');
+        res.json(`Tip added successfully 🚀`);
+    } else {
+        res.error('Error in adding tip');
+    }
+});  
+  
+//Route to delete saved notes
+notesRouter.delete("/:id", (req, res) => {
+    const noteId = req.params.id;
+    //figure out wtf to put here
+});
+
+module.exports = notesRouter;
