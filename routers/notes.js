@@ -4,7 +4,7 @@ const { readFromFile,  readAndAppend } = require('../helpers/fsUtils');
 
 //Route to add saved notes
 notesRouter.get('/', (req, res) => {
-    readFromFile('./db/tips.json').then((data) => res.json(JSON.parse(data)));
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
   });
   
 //Route to save new notes
@@ -19,9 +19,9 @@ notesRouter.post('/', (req, res) => {
         };
 
         readAndAppend(newNote, './db/db.json');
-        res.json(`Tip added successfully 🚀`);
+        res.json(`Note added successfully 🚀`);
     } else {
-        res.error('Error in adding tip');
+        res.error('Error in adding note');
     }
 });  
   
