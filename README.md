@@ -28,7 +28,7 @@ Whether you're a student, professional, or anyone in need of a convenient note-t
 
 <a id='installation'></a>
 ## Installation
-No installation needed, just follow the link here to open the application.
+No installation needed. Just follow the link [here](https://note-taker-0.herokuapp.com/) to open the application.
 
 
 ---
